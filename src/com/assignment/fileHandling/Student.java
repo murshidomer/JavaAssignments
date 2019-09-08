@@ -1,9 +1,7 @@
 package com.assignment.fileHandling;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Student implements Serializable {
     private int rollNumber;
@@ -30,45 +28,24 @@ public class Student implements Serializable {
     public static void main(String[] args) {
         String path = "C:\\Users\\Murshid\\Desktop\\readTest.txt";
         Student student = new Student();
-        student = student.readFromCSV(path);
         System.out.println(student);
+        student.readFromCSV(path);
     }
 
-    private Student readFromCSV(String path) {
-        FileInputStream input;
-        DataInputStream dis;
+    private void readFromCSV(String path) {
         try {
-            input = new FileInputStream(path);
-            dis = new DataInputStream(input);
-            int count = input.available();
-/*
-                dis.read(bytesArray);
-                rollNumber = dis.read();
-                char test = dis.readChar();
-                firstName = new String(bytesArray) ;
-                lastName = new String(bytesArray);
-                course = new String(bytesArray);
-                phoneNumber = new String(bytesArray);
-                hostel = new String(bytesArray);
-*/
-
-            System.out.println(input.available());
-            System.out.println(dis.readInt());
-            System.out.println(dis.readDouble());
-            System.out.println(dis.readChar());
-            System.out.println(dis.readBoolean());
-            System.out.println(dis.readLong());
-            System.out.println(dis.readFloat());
-
-           /* System.out.println("Int   : "+dis.readInt());
-            System.out.println("Short : "+dis.readShort());
-            System.out.println("Byte  : "+dis.readByte());*/
-            dis.close();
-            input.close();
+            Reader reader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
+            Writer writer = new OutputStreamWriter(new FileOutputStream(
+                    "C:\\Users\\Murshid\\Desktop\\readTestOuttput.txt"), StandardCharsets.UTF_8);
+            int c;
+            while ((c = reader.read()) != -1) {
+                writer.write(c);
+            }
+            writer.close();
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new Student(rollNumber, firstName, lastName, course, phoneNumber, hostel);
     }
 
     @Override
